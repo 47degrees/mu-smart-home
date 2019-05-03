@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package com.fortysevendeg.smarthome.protocol;
+
+import "messages.proto";
+
+service SmartHomeService {
+
+  rpc isEmpty (com.fortysevendeg.smarthome.protocol.IsEmptyRequest) returns (com.fortysevendeg.smarthome.protocol.IsEmptyResponse);
+  rpc getTemperature (com.fortysevendeg.smarthome.protocol.IsEmptyRequest) returns (stream com.fortysevendeg.smarthome.protocol.Temperature);
+  rpc comingBackMode (stream com.fortysevendeg.smarthome.protocol.Location) returns (stream com.fortysevendeg.smarthome.protocol.ComingBackModeResponse);
+
+}

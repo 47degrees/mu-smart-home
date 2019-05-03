@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package com.fortysevendeg.smarthome.protocol;
+
+message TemperatureUnit {
+  string value = 1;
+}
+
+message Temperature {
+  double value = 1;
+  TemperatureUnit unit = 2;
+}
+
+message Point {
+  double lat = 1;
+  double long = 2;
+}
+
+message Location {
+  Point currentLocation = 1;
+  Point destination = 2;
+  double distanceToDestination = 3;
+}
+
+message SmartHomeAction {
+  string value = 1;
+}
+
+message IsEmptyRequest {}
+
+message IsEmptyResponse {
+  bool result = 1;
+}
+
+message ComingBackModeResponse {
+  repeated SmartHomeAction actions = 1;
+}
