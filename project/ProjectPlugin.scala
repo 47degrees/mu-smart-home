@@ -14,6 +14,7 @@ object ProjectPlugin extends AutoPlugin {
       val log4cats       = "0.3.0"
       val logbackClassic = "1.2.3"
       val mu             = "0.18.0"
+      val pubSub         = "1.70.0"
       val pureconfig     = "0.10.2"
     }
   }
@@ -68,7 +69,15 @@ object ProjectPlugin extends AutoPlugin {
     Seq(
       libraryDependencies ++= Seq(
         "io.higherkindness" %% "mu-rpc-netty" % V.mu,
-        "io.higherkindness" %% "mu-rpc-fs2"    % V.mu
+        "io.higherkindness" %% "mu-rpc-fs2"   % V.mu
+      )
+    )
+
+  lazy val pubSub4sSettings: Seq[Def.Setting[_]] = commonSettings ++
+    Seq(
+      libraryDependencies ++= Seq(
+        "org.typelevel"    %% "cats-effect"        % V.catsEffect,
+        "com.google.cloud" % "google-cloud-pubsub" % V.pubSub
       )
     )
 
