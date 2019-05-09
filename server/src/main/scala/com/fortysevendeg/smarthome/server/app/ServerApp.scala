@@ -6,12 +6,13 @@ import cats.syntax.functor._
 import com.fortysevendeg.smarthome.server.common._
 import com.fortysevendeg.smarthome.server.process._
 import com.fortysevendeg.smarthome.protocol.services._
+import com.permutive.pubsub.producer.PubsubProducer
 import higherkindness.mu.rpc.server.{AddService, GrpcServer}
 import io.chrisdavenport.log4cats.Logger
 
-class ServerProgram[F[_]: ConcurrentEffect: Timer] extends ServerBoot[F] {
+class ServerProgram[F[_]: ConcurrentEffect: ContextShift: Timer] extends ServerBoot[F] {
 
-  def serverProgram(config: SmartHomeServerConfig)(implicit L: Logger[F]): F[ExitCode] = {
+  override def serverProgram(config: SmartHomeServerConfig)(implicit L: Logger[F], topicPubSubClient: Resource[F, PubsubProducer[F, Row]]): F[ExitCode] = {
 
     implicit val PS: SmartHomeService[F] = new SmartHomeServiceHandler[F]
 

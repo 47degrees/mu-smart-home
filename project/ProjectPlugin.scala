@@ -1,7 +1,7 @@
 import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import sbt.Keys._
-import sbt._
+import sbt.{addCompilerPlugin, _}
 
 object ProjectPlugin extends AutoPlugin {
 
@@ -59,6 +59,7 @@ object ProjectPlugin extends AutoPlugin {
     codeGenSettings ++
     Seq(
       libraryDependencies ++= Seq(
+        "com.permutive" %% "fs2-google-pubsub-grpc" % "0.12.0",
         "io.higherkindness" %% "mu-rpc-server" % V.mu,
         "io.higherkindness" %% "mu-rpc-fs2"    % V.mu
       )
