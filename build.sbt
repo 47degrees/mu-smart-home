@@ -16,7 +16,6 @@ lazy val server = project
   .settings(serverSettings)
   .dependsOn(protocol)
   .dependsOn(shared)
-  .dependsOn(pubSub4s)
 
 lazy val client = project
   .in(file("client"))

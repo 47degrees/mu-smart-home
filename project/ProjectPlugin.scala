@@ -1,7 +1,7 @@
 import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import sbt.Keys._
-import sbt.{addCompilerPlugin, _}
+import sbt._
 
 object ProjectPlugin extends AutoPlugin {
 

@@ -16,7 +16,7 @@ import pureconfig.generic.auto._
 import scala.concurrent.duration._
 
 
-abstract class ServerBoot[F[_]: ConcurrentEffect: ContextShift] {
+abstract class ServerBoot[F[_]: ConcurrentEffect] {
 
   implicit val encoder: MessageEncoder[Row] = (a: Row) => Right(a.toString.getBytes)
 
