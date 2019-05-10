@@ -11,6 +11,7 @@ import com.permutive.pubsub.producer.encoder.MessageEncoder
 import com.permutive.pubsub.producer.grpc.{GooglePubsubProducer, PubsubProducerConfig}
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
+import io.circe.generic.auto._, io.circe.syntax._
 import pureconfig.generic.auto._
 
 import scala.concurrent.duration._
@@ -18,7 +19,7 @@ import scala.concurrent.duration._
 
 abstract class ServerBoot[F[_]: ConcurrentEffect] {
 
-  implicit val encoder: MessageEncoder[Row] = (a: Row) => Right(a.toString.getBytes)
+  implicit val encoder: MessageEncoder[Row] = (row: Row) => Right(row.asJson.noSpaces.getBytes)
 
   def runProgram(args: List[String]): F[ExitCode] =
     for {
@@ -29,9 +30,9 @@ abstract class ServerBoot[F[_]: ConcurrentEffect] {
           Model.ProjectId(config.project),
           Model.Topic(config.topic),
           config = PubsubProducerConfig[F](
-            batchSize = 100,
-            delayThreshold = 100.millis,
-            onFailedTerminate = e => Sync[F].delay(println(s"Got error $e")) >> Sync[F].unit
+            batchSize = config.batchSize,
+            delayThreshold = FiniteDuration(config.delayThreshold, MILLISECONDS),
+            onFailedTerminate = e => logger.error(s"Got error $e")
           )
         )
       exitCode <- serverProgram(config)(logger, pubsub)

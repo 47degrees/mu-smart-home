@@ -1,6 +1,5 @@
 package com.fortysevendeg.smarthome.server.process
 
-import java.sql.Timestamp
 import java.time.Instant
 
 import cats.effect.{Resource, Sync}
@@ -57,7 +56,7 @@ object SmartHomeSupervisor {
     private def publishLocation(location: Location): F[String] = {
       topicPubSubClient.use { producer =>
         producer.produce(
-          Row(Timestamp.from(Instant.now), location.currentLocation.lat, location.currentLocation.long),
+          Row(Instant.now, location.currentLocation.lat, location.currentLocation.long),
         )
       }
     }
