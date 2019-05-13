@@ -27,11 +27,11 @@ abstract class ServerBoot[F[_]: ConcurrentEffect] {
       logger  <- Slf4jLogger.fromName[F](config.name)
       pubsub  =
         GooglePubsubProducer.of[F, Row](
-          Model.ProjectId(config.project),
-          Model.Topic(config.topic),
+          Model.ProjectId(config.pubsub.project),
+          Model.Topic(config.pubsub.topic),
           config = PubsubProducerConfig[F](
-            batchSize = config.batchSize,
-            delayThreshold = FiniteDuration(config.delayThreshold, MILLISECONDS),
+            batchSize = config.pubsub.batchSize,
+            delayThreshold = FiniteDuration(config.pubsub.delayThreshold, MILLISECONDS),
             onFailedTerminate = e => logger.error(s"Got error $e")
           )
         )
