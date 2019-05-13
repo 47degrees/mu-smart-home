@@ -16,6 +16,7 @@ object ProjectPlugin extends AutoPlugin {
       val mu             = "0.18.0"
       val pubSub         = "1.70.0"
       val pureconfig     = "0.10.2"
+      val circeVersion   = "0.11.1"
     }
   }
 
@@ -59,9 +60,15 @@ object ProjectPlugin extends AutoPlugin {
     codeGenSettings ++
     Seq(
       libraryDependencies ++= Seq(
+        "com.permutive" %% "fs2-google-pubsub-grpc" % "0.12.0",
         "io.higherkindness" %% "mu-rpc-server" % V.mu,
-        "io.higherkindness" %% "mu-rpc-fs2"    % V.mu
-      )
+        "io.higherkindness" %% "mu-rpc-fs2"    % V.mu,
+      ),
+      libraryDependencies ++= Seq(
+        "io.circe" %% "circe-core",
+        "io.circe" %% "circe-generic",
+        "io.circe" %% "circe-parser"
+      ).map(_ % V.circeVersion)
     )
 
   lazy val clientSettings: Seq[Def.Setting[_]] = commonSettings ++

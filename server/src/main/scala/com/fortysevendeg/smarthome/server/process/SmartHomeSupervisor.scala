@@ -1,7 +1,12 @@
 package com.fortysevendeg.smarthome.server.process
 
-import cats.effect.Sync
+import java.time.Instant
+
+import cats.effect.{Resource, Sync}
+import cats.syntax.all._
 import com.fortysevendeg.smarthome.protocol.messages._
+import com.fortysevendeg.smarthome.server.common.Row
+import com.permutive.pubsub.producer.PubsubProducer
 import io.chrisdavenport.log4cats.Logger
 
 trait SmartHomeSupervisor[F[_]] {
@@ -9,7 +14,7 @@ trait SmartHomeSupervisor[F[_]] {
 }
 
 object SmartHomeSupervisor {
-  implicit def instance[F[_]: Sync: Logger]: SmartHomeSupervisor[F] = new SmartHomeSupervisor[F] {
+  implicit def instance[F[_]: Sync: Logger](implicit topicPubSubClient: Resource[F, PubsubProducer[F, Row]]): SmartHomeSupervisor[F] = new SmartHomeSupervisor[F] {
     val connectAlexa            = "👩 - Connect Alexa"
     val disableIrrigationSystem = "💦 - Disable irrigation system"
     val enableSecurityCameras   = "👮 - Enable security cameras"
@@ -27,7 +32,7 @@ object SmartHomeSupervisor {
     val waiting                 = "👀 - Waiting for a new location..."
     val welcomeHome             = "🏡 - Welcome Home"
 
-    override def performAction(location: Location): F[List[SmartHomeAction]] = Sync[F].delay(
+    override def performAction(location: Location): F[List[SmartHomeAction]] = publishLocation(location) *> Sync[F].delay(
       if (location.distanceToDestination < 6.0d && location.distanceToDestination > 5.85d)
         List(SmartHomeAction(enableSecurityCameras))
       else if (location.distanceToDestination < 5.0d && location.distanceToDestination > 4.85d)
@@ -47,7 +52,16 @@ object SmartHomeSupervisor {
       else
         List(SmartHomeAction(waiting))
     )
+
+    private def publishLocation(location: Location): F[String] = {
+      topicPubSubClient.use { producer =>
+        producer.produce(
+          Row(Instant.now, location.currentLocation.lat, location.currentLocation.long),
+        )
+      }
+    }
   }
 
   def apply[F[_]](implicit ev: SmartHomeSupervisor[F]): SmartHomeSupervisor[F] = ev
+
 }
