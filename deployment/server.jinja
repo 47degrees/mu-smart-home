@@ -21,6 +21,10 @@ resources:
         app: {{ env['name'] }}
         deployment: {{ env['deployment'] }}
     spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
       replicas: {{ properties['replicas'] | default(2) }}
       selector:
         matchLabels:
@@ -37,6 +41,12 @@ resources:
             name: mu-smart-home-server
             ports:
             - containerPort: 9111
+            volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+            env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
 
 - name: {{ NAME_PREFIX }}-svc
   type: {{ CLUSTER_TYPE }}:{{ SERVICE_COLLECTION }}
