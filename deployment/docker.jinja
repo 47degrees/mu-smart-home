@@ -1,0 +1,29 @@
+{% set IMAGE = "eu.gcr.io/" + env["project"] + "/mu-smart-home" %}
+
+resources:
+- name: build-mu
+  action: gcp-types/cloudbuild-v1:cloudbuild.projects.builds.create
+  metadata:
+    runtimePolicy:
+    - UPDATE_ALWAYS
+  properties:
+    steps:
+    - name: gcr.io/cloud-builders/git
+      args:
+      - clone
+      - https://github.com/47deg/mu-smart-home.git
+    - name: gcr.io/cloud-builders/docker
+      dir: mu-smart-home/
+      args:
+      - build
+      - --build-arg
+      - PROJECT={{ properties['project'] }}
+      - --build-arg
+      - VERSION={{ properties['version'] }}
+      - -t
+      - {{ IMAGE }}:{{ properties['version'] }}
+      - .
+    timeout: 120s
+    images:
+    - {{ IMAGE }}:{{ properties['version'] }}
+

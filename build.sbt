@@ -12,6 +12,7 @@ lazy val shared = project
 
 lazy val server = project
   .in(file("server"))
+  .enablePlugins(UniversalPlugin, JavaAppPackaging)
   .settings(moduleName := "mu-smart-home-server")
   .settings(serverSettings)
   .dependsOn(protocol)

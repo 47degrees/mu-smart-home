@@ -1,0 +1,38 @@
+imports:
+  - path: deployment/k8s.jinja
+    name: k8s.jinja
+  - path: deployment/docker.jinja
+    name: docker.jinja
+
+resources:
+  - name: mu-build
+    type: docker.jinja
+    properties:
+      project: server
+      version: 0.1.0
+#  - name: mu-cluster
+#    type: k8s.jinja
+#    properties:
+#      description: "Mu Cluster"
+#      zones:
+#        - europe-west1-b
+#        - europe-west1-c
+#      initialNodeCount: 1
+
+
+#steps:
+#  - name: 'gcr.io/cloud-builders/docker'
+#    args: ['build',
+#           '--build-arg',
+#           'PROJECT=${_PROJECT}',
+#           '--build-arg',
+#           'VERSION=${_VERSION}',
+#           '-t',
+#           'eu.gcr.io/$PROJECT_ID/mu-smart-home:${_VERSION}',
+#           '.']
+#substitutions:
+#  _PROJECT: server # default value
+#  _VERSION: 0.1.0 # default value
+#images: [
+#  'eu.gcr.io/$PROJECT_ID/mu-smart-home:${_VERSION}'
+#]
