@@ -1,0 +1,62 @@
+{% set NAME_PREFIX = env['deployment'] %}
+{% set CLUSTER_TYPE      = env['project'] + '/' + properties['cluster-type'] %}
+{% set CLUSTER_TYPE_APPS = env['project'] + '/' + properties['cluster-type-apps'] %}
+{% set CLUSTER_TYPE_BETA = env['project'] + '/' + properties['cluster-type-v1beta1-extensions'] %}
+{% set DEPLOYMENT_COLLECTION = '/apis/apps/v1/namespaces/{namespace}/deployments' %}
+{% set SERVICE_COLLECTION = '/api/v1/namespaces/{namespace}/services' %}
+{% set IMAGE = "eu.gcr.io/" + env["project"] + "/mu-smart-home:" + properties['version'] %}
+
+resources:
+- name: {{ NAME_PREFIX }}
+  type: {{ CLUSTER_TYPE_APPS }}:{{ DEPLOYMENT_COLLECTION }}
+  metadata:
+    dependsOn:
+    - {{ properties['cluster-type-apps'] }}
+  properties:
+    apiVersion: apps/v1
+    kind: Deployment
+    namespace: {{ properties['namespace'] | default('default') }}
+    metadata:
+      labels:
+        app: {{ env['name'] }}
+        deployment: {{ env['deployment'] }}
+    spec:
+      replicas: {{ properties['replicas'] | default(2) }}
+      selector:
+        matchLabels:
+          app: {{ env['name'] }}
+          deployment: {{ env['deployment'] }}
+      template:
+        metadata:
+          labels:
+            app: {{ env['name'] }}
+            deployment: {{ env['deployment'] }}
+        spec:
+          containers:
+          - image: {{ IMAGE }}
+            name: mu-smart-home-server
+            ports:
+            - containerPort: 9111
+
+- name: {{ NAME_PREFIX }}-svc
+  type: {{ CLUSTER_TYPE }}:{{ SERVICE_COLLECTION }}
+  metadata:
+    dependsOn:
+    - {{ properties['cluster-type'] }}
+  properties:
+    apiVersion: v1
+    kind: Service
+    namespace: {{ properties['namespace'] | default('default') }}
+    metadata:
+      name: {{ NAME_PREFIX }}-svc
+      labels:
+        app: {{ env['name'] }}
+        deployment: {{ env['deployment'] }}
+    spec:
+      type: LoadBalancer
+      ports:
+      - port: 80
+        targetPort: 9111
+      selector:
+        app: {{ env['name'] }}
+        deployment: {{ env['deployment'] }}

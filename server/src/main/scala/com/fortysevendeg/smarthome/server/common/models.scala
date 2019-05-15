@@ -15,4 +15,4 @@ case class PubSubConfig(topic: String,
                         delayThreshold: Int
                        )
 
-case class Row(timestamp: Instant, lat: Double, lon: Double)
+case class Row(timestamp: Instant, lat: Double, long: Double)

@@ -1,0 +1,38 @@
+imports:
+  - path: deployment/k8s.jinja
+    name: k8s.jinja
+  - path: deployment/docker.jinja
+    name: docker.jinja
+  - path: deployment/bigquery.jinja
+    name: bigquery.jinja
+  - path: deployment/pubsub.jinja
+    name: pubsub.jinja
+  - path: deployment/server.jinja
+    name: server.jinja
+
+resources:
+  - name: pubsub
+    type: pubsub.jinja
+  - name: mu-table
+    type: bigquery.jinja
+  - name: mu-build
+    type: docker.jinja
+    properties:
+      project: server
+      version: 0.1.0
+      branch: master
+  - name: mu-cluster
+    type: k8s.jinja
+    properties:
+      description: "Mu Cluster"
+      zones:
+        - europe-west1-b
+        - europe-west1-c
+      initialNodeCount: 1
+  - name: mu-smart-home-server
+    type: server.jinja
+    properties:
+      cluster-type:                    $(ref.mu-cluster.clusterType)
+      cluster-type-apps:               $(ref.mu-cluster.clusterType-apps)
+      cluster-type-v1beta1-extensions: $(ref.mu-cluster.clusterType-v1beta1-extensions)
+      version:                         0.1.0
