@@ -49,4 +49,3 @@ LIMIT 1000
 In BigQuery Geo Viz we can execute this query and we will have the following map: 
 
 ![Map](img/Map.png)
-
