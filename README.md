@@ -8,7 +8,7 @@ To run locally the mu server you need a service account with the role `Pub/Sub P
 environment variable `GOOGLE_APPLICATION_CREDENTIALS`. It must point to the JSON file that contains your service 
 account key.
 
-Òn the other side, you can deploy a kubernetes cluster with `mu-smart-home` server running on it running the command 
+On the other side, you can deploy a kubernetes cluster with `mu-smart-home` server running on it running the command 
 `gcloud deployment-manager deployments create mu-example --config cloudbuild.yaml`. Also, you will deploy a BigQuery 
 table and a pubsub topic. You can modify the configuration in the `cloudbuild.yaml` configuration file. To do this, you 
 need to grant the role `Security Admin` to the cloudbuild service account.
