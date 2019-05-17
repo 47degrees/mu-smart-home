@@ -21,10 +21,6 @@ resources:
         app: {{ env['name'] }}
         deployment: {{ env['deployment'] }}
     spec:
-      volumes:
-      - name: google-cloud-key
-        secret:
-          secretName: pubsub-key
       replicas: {{ properties['replicas'] | default(2) }}
       selector:
         matchLabels:
@@ -36,6 +32,10 @@ resources:
             app: {{ env['name'] }}
             deployment: {{ env['deployment'] }}
         spec:
+          volumes:
+          - name: google-cloud-key
+            secret:
+              secretName: pubsub-key
           containers:
           - image: {{ IMAGE }}
             name: mu-smart-home-server

@@ -1,0 +1,24 @@
+{% set SERVICE_ACCOUNT = (env["deployment"] + "-service-account") %}
+{% set NAME = ("projects/" + env["project"] + "/serviceAccounts/" + env["deployment"] + "-service-account" + "/keys/json") %}
+{% set PARENT = ("projects/" + env["project"] + "/serviceAccounts/" + env["deployment"] + "-service-account" + "@" + env["project"] + ".iam.gserviceaccount.com") %}
+
+resources:
+- name: mu-service-account
+  type: iam.v1.serviceAccount
+  properties:
+    accountId: {{ SERVICE_ACCOUNT }}
+    displayName: serviceAccount-{{ env['name'] }}
+
+- name: mu-key
+  type: iam.v1.serviceAccounts.key
+  properties:
+    name: {{ NAME }}
+    parent: $(ref.mu-service-account.name)
+    privateKeyType: TYPE_GOOGLE_CREDENTIALS_FILE
+    keyAlgorithm: KEY_ALG_RSA_2048
+
+outputs:
+- name: serviceAccountEmail
+  value: $(ref.mu-service-account.email)
+- name: privateKeyData
+  value: $(ref.mu-key.privateKeyData)
