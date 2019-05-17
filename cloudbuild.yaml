@@ -32,7 +32,7 @@ resources:
     properties:
       project: server
       version: 0.1.0
-      branch: kubernetesSecret
+      branch: master
 
   - name: mu-cluster
     type: k8s.jinja
