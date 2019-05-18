@@ -9,18 +9,31 @@ imports:
     name: pubsub.jinja
   - path: deployment/server.jinja
     name: server.jinja
+  - path: deployment/secret.jinja
+    name: secret.jinja
+  - path: deployment/iam.jinja
+    name: iam.jinja
 
 resources:
+  - name: service-account
+    type: iam.jinja
+
   - name: pubsub
     type: pubsub.jinja
+    metadata:
+      dependsOn:
+      - service-account
+
   - name: mu-table
     type: bigquery.jinja
+
   - name: mu-build
     type: docker.jinja
     properties:
       project: server
       version: 0.1.0
       branch: master
+
   - name: mu-cluster
     type: k8s.jinja
     properties:
@@ -29,6 +42,17 @@ resources:
         - europe-west1-b
         - europe-west1-c
       initialNodeCount: 1
+
+  - name: secret
+    type: secret.jinja
+    metadata:
+      dependsOn:
+      - service-account
+    properties:
+      key: $(ref.service-account.privateKeyData)
+      cluster-type: $(ref.mu-cluster.clusterType)
+      cluster-type-apps: $(ref.mu-cluster.clusterType-apps)
+
   - name: mu-smart-home-server
     type: server.jinja
     properties:
