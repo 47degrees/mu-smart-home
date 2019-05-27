@@ -1,4 +1,4 @@
-{% set K8S_ENDPOINTS = {
+{% set k8s_endpoints = {
       '': 'api/v1',
       '-apps': 'apis/apps/v1',
       '-rbac': 'apis/rbac.authorization.k8s.io/v1',
@@ -28,7 +28,7 @@ resources:
           autoUpgrade: true
           autoRepair: true
 
-{% for typeSuffix, endpoint in K8S_ENDPOINTS.iteritems() %}
+{% for typeSuffix, endpoint in k8s_endpoints.iteritems() %}
 - name: {{ env['name'] }}-type{{ typeSuffix }}
   type: deploymentmanager.v2beta.typeProvider
   properties:
@@ -60,7 +60,7 @@ resources:
 {% endfor %}
 
 outputs:
-{% for typeSuffix, endpoint in K8S_ENDPOINTS.iteritems() %}
+{% for typeSuffix, endpoint in k8s_endpoints.iteritems() %}
 - name: clusterType{{ typeSuffix }}
   value: {{ env['name'] }}-type{{ typeSuffix }}
 {% endfor %}

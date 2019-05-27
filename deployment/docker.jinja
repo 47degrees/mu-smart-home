@@ -1,4 +1,4 @@
-{% set IMAGE = "eu.gcr.io/" + env["project"] + "/mu-smart-home:" + properties['version'] %}
+{% set image = "eu.gcr.io/" + env["project"] + "/mu-smart-home:" + properties['version'] %}
 
 resources:
 - name: build-mu
@@ -26,8 +26,8 @@ resources:
       - --build-arg
       - VERSION={{ properties['version'] }}
       - -t
-      - {{ IMAGE }}
+      - {{ image }}
       - .
     images:
-    - {{ IMAGE }}
+    - {{ image }}
 

@@ -1,14 +1,13 @@
-{% set NAME_PREFIX = env['deployment'] %}
-{% set CLUSTER_TYPE      = env['project'] + '/' + properties['cluster-type'] %}
-{% set CLUSTER_TYPE_APPS = env['project'] + '/' + properties['cluster-type-apps'] %}
-{% set CLUSTER_TYPE_BETA = env['project'] + '/' + properties['cluster-type-v1beta1-extensions'] %}
-{% set DEPLOYMENT_COLLECTION = '/apis/apps/v1/namespaces/{namespace}/deployments' %}
-{% set SERVICE_COLLECTION = '/api/v1/namespaces/{namespace}/services' %}
-{% set IMAGE = "eu.gcr.io/" + env["project"] + "/mu-smart-home:" + properties['version'] %}
+{% set name_prefix = env['deployment'] %}
+{% set cluster_type      = env['project'] + '/' + properties['cluster-type'] %}
+{% set cluster_type_apps = env['project'] + '/' + properties['cluster-type-apps'] %}
+{% set deployment_collection = '/apis/apps/v1/namespaces/{namespace}/deployments' %}
+{% set service_collection = '/api/v1/namespaces/{namespace}/services' %}
+{% set image = "eu.gcr.io/" + env["project"] + "/mu-smart-home:" + properties['version'] %}
 
 resources:
-- name: {{ NAME_PREFIX }}
-  type: {{ CLUSTER_TYPE_APPS }}:{{ DEPLOYMENT_COLLECTION }}
+- name: {{ name_prefix }}-deployment
+  type: {{ cluster_type_apps }}:{{ deployment_collection }}
   metadata:
     dependsOn:
     - {{ properties['cluster-type-apps'] }}
@@ -37,7 +36,7 @@ resources:
             secret:
               secretName: pubsub-key
           containers:
-          - image: {{ IMAGE }}
+          - image: {{ image }}
             name: mu-smart-home-server
             ports:
             - containerPort: 9111
@@ -48,8 +47,8 @@ resources:
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /var/secrets/google/key.json
 
-- name: {{ NAME_PREFIX }}-svc
-  type: {{ CLUSTER_TYPE }}:{{ SERVICE_COLLECTION }}
+- name: {{ name_prefix }}-svc
+  type: {{ cluster_type }}:{{ service_collection }}
   metadata:
     dependsOn:
     - {{ properties['cluster-type'] }}
@@ -58,7 +57,7 @@ resources:
     kind: Service
     namespace: {{ properties['namespace'] | default('default') }}
     metadata:
-      name: {{ NAME_PREFIX }}-svc
+      name: {{ name_prefix }}-svc
       labels:
         app: {{ env['name'] }}
         deployment: {{ env['deployment'] }}

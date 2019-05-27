@@ -1,18 +1,18 @@
-{% set DATASET = (env["deployment"] + "-dataset")|replace("-","_") %}
-{% set TABLE = (env["deployment"] + "-table")|replace("-","_") %}
+{% set dataset = (env["deployment"] + "-dataset")|replace("-","_") %}
+{% set table = (env["deployment"] + "-table")|replace("-","_") %}
 
 resources:
-- name: {{ DATASET }}
+- name: {{ dataset }}
   type: gcp-types/bigquery-v2:datasets
   properties:
     datasetReference:
-      datasetId: {{ DATASET }}
-- name: {{ TABLE }}
+      datasetId: {{ dataset }}
+- name: {{ table }}
   type: gcp-types/bigquery-v2:tables
   properties:
-    datasetId: $(ref.{{ DATASET }}.datasetReference.datasetId)
+    datasetId: $(ref.{{ dataset }}.datasetReference.datasetId)
     tableReference:
-      tableId: {{ TABLE }}
+      tableId: {{ table }}
     schema:
       fields:
         - name: timestamp
