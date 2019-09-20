@@ -60,7 +60,7 @@ object ProjectPlugin extends AutoPlugin {
     codeGenSettings ++
     Seq(
       libraryDependencies ++= Seq(
-        "com.permutive" %% "fs2-google-pubsub-grpc" % "0.12.0",
+        "com.permutive" %% "fs2-google-pubsub-grpc" % "0.14.0",
         "io.higherkindness" %% "mu-rpc-server" % V.mu,
         "io.higherkindness" %% "mu-rpc-fs2"    % V.mu,
       ),
