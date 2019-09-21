@@ -10,8 +10,8 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      val catsEffect     = "1.2.0"
-      val log4cats       = "1.0.0"
+      val catsEffect     = "1.4.0"
+      val log4cats       = "0.3.0"
       val logbackClassic = "1.2.3"
       val mu             = "0.18.0"
       val pubSub         = "1.70.0"
