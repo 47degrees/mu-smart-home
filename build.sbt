@@ -25,17 +25,15 @@ lazy val client = project
   .dependsOn(protocol)
   .dependsOn(shared)
 
-lazy val pubSub4s = project
-  .in(file("pubSub4s"))
-  .settings(moduleName := "mu-smart-home-pubsub4s")
-  .settings(pubSub4sSettings)
-
 lazy val root = project
   .in(file("."))
   .settings(name := "mu-smart-home")
   .settings(noPublishSettings)
-  .aggregate(protocol, shared, server, client, pubSub4s)
-  .dependsOn(protocol, shared, server, client, pubSub4s)
+  .aggregate(protocol, shared, server, client)
+  .dependsOn(protocol, shared, server, client)
 
 addCommandAlias("runServer", "server/runMain com.fortysevendeg.smarthome.server.app.ServerApp")
 addCommandAlias("runClient", "client/runMain com.fortysevendeg.smarthome.client.app.ClientApp")
+
+addCommandAlias("ci-test", "scalafmtCheck; scalafmtSbtCheck; compile")
+addCommandAlias("ci-docs", "compile")

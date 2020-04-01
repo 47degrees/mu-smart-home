@@ -1,4 +1,5 @@
-import higherkindness.mu.rpc.idlgen.IdlGenPlugin.autoImport._
+import higherkindness.mu.rpc.srcgen.SrcGenPlugin.autoImport._
+import higherkindness.mu.rpc.srcgen.Model._
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import sbt.Keys._
 import sbt._
@@ -13,20 +14,21 @@ object ProjectPlugin extends AutoPlugin {
       val catsEffect     = "2.1.2"
       val log4cats       = "1.0.1"
       val logbackClassic = "1.2.3"
-      val mu             = "0.18.0"
-      val pubSub         = "1.103.1"
+      val mu             = "0.21.3"
       val pureconfig     = "0.12.3"
       val circeVersion   = "0.13.0"
+      val scala          = "2.13.1"
+      val fs2PubSub      = "0.15.0"
     }
   }
 
   import autoImport._
 
   private lazy val codeGenSettings: Seq[Def.Setting[_]] = Seq(
-    idlType := "proto",
-    srcGenSerializationType := "Protobuf",
-    srcGenJarNames := Seq("mu-smart-home-protocol"),
-    sourceGenerators in Compile += (srcGen in Compile).taskValue
+    muSrcGenIdlType := IdlType.Proto,
+    muSrcGenIdiomaticEndpoints := true,
+    muSrcGenJarNames := Seq("mu-smart-home-protocol"),
+    sourceGenerators in Compile += (muSrcGen in Compile).taskValue
   )
 
   private lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
@@ -60,9 +62,9 @@ object ProjectPlugin extends AutoPlugin {
     codeGenSettings ++
     Seq(
       libraryDependencies ++= Seq(
-        "com.permutive" %% "fs2-google-pubsub-grpc" % "0.15.0",
-        "io.higherkindness" %% "mu-rpc-server" % V.mu,
-        "io.higherkindness" %% "mu-rpc-fs2"    % V.mu,
+        "com.permutive"     %% "fs2-google-pubsub-grpc" % V.fs2PubSub,
+        "io.higherkindness" %% "mu-rpc-server"          % V.mu,
+        "io.higherkindness" %% "mu-rpc-fs2"             % V.mu
       ),
       libraryDependencies ++= Seq(
         "io.circe" %% "circe-core",
@@ -80,38 +82,13 @@ object ProjectPlugin extends AutoPlugin {
       )
     )
 
-  lazy val pubSub4sSettings: Seq[Def.Setting[_]] = commonSettings ++
-    Seq(
-      libraryDependencies ++= Seq(
-        "org.typelevel"    %% "cats-effect"        % V.catsEffect,
-        "com.google.cloud" % "google-cloud-pubsub" % V.pubSub
-      )
-    )
-
   override def projectSettings: Seq[Def.Setting[_]] =
     Seq(
       name := "mu-smart-home",
       organization := "com.47deg",
       organizationName := "47 Degrees",
-      scalaVersion := "2.12.8",
-      scalacOptions := Seq(
-        "-deprecation",
-        "-encoding",
-        "UTF-8",
-        "-feature",
-        "-language:existentials",
-        "-language:higherKinds",
-        "-language:implicitConversions",
-        "-unchecked",
-        "-Xlint",
-        "-Yno-adapted-args",
-        "-Ywarn-dead-code",
-        "-Ywarn-numeric-widen",
-        "-Ywarn-value-discard",
-        "-Xfuture",
-        "-Ywarn-unused-import"
-      ),
-      scalafmtCheck := true,
-      addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+      scalaVersion := V.scala,
+      scalacOptions += "-Ymacro-annotations",
+      scalafmtCheck := true
     )
 }

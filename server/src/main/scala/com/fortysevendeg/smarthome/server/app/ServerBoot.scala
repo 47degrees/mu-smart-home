@@ -16,27 +16,27 @@ import pureconfig.generic.auto._
 
 import scala.concurrent.duration._
 
-
 abstract class ServerBoot[F[_]: ConcurrentEffect] {
 
   implicit val encoder: MessageEncoder[Row] = (row: Row) => Right(row.asJson.noSpaces.getBytes)
 
   def runProgram(args: List[String]): F[ExitCode] =
     for {
-      config  <- ConfigService[F].serviceConfig[SmartHomeServerConfig]
-      logger  <- Slf4jLogger.fromName[F](config.name)
-      pubsub  =
-        GooglePubsubProducer.of[F, Row](
-          Model.ProjectId(config.pubsub.project),
-          Model.Topic(config.pubsub.topic),
-          config = PubsubProducerConfig[F](
-            batchSize = config.pubsub.batchSize,
-            delayThreshold = FiniteDuration(config.pubsub.delayThreshold, MILLISECONDS),
-            onFailedTerminate = e => logger.error(s"Got error $e")
-          )
+      config <- ConfigService[F].serviceConfig[SmartHomeServerConfig]
+      logger <- Slf4jLogger.fromName[F](config.name)
+      pubsub = GooglePubsubProducer.of[F, Row](
+        Model.ProjectId(config.pubsub.project),
+        Model.Topic(config.pubsub.topic),
+        config = PubsubProducerConfig[F](
+          batchSize = config.pubsub.batchSize,
+          delayThreshold = FiniteDuration(config.pubsub.delayThreshold, MILLISECONDS),
+          onFailedTerminate = e => logger.error(s"Got error $e")
         )
+      )
       exitCode <- serverProgram(config)(logger, pubsub)
     } yield exitCode
 
-  def serverProgram(config: SmartHomeServerConfig)(implicit L: Logger[F], topicPubSubClient: Resource[F, PubsubProducer[F, Row]]): F[ExitCode]
+  def serverProgram(
+      config: SmartHomeServerConfig
+  )(implicit L: Logger[F], topicPubSubClient: Resource[F, PubsubProducer[F, Row]]): F[ExitCode]
 }

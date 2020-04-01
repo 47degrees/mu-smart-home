@@ -17,24 +17,23 @@ trait TemperatureReader[F[_]] {
 object TemperatureReader {
   implicit def instance[F[_]: Sync: Logger: Timer]: TemperatureReader[F] =
     new TemperatureReader[F] {
-      val seed = Temperature(77d, TemperatureUnit("Fahrenheit"))
+      val seed = Temperature(77d, Some(TemperatureUnit("Fahrenheit")))
 
       def readTemperature(current: Temperature): F[Temperature] =
         Timer[F]
           .sleep(1.second)
-          .flatMap(
-            _ =>
-              Sync[F].delay {
-                val increment: Double = Random.nextDouble() / 2d
-                val signal            = if (Random.nextBoolean()) 1 else -1
-                val currentValue      = current.value
+          .flatMap(_ =>
+            Sync[F].delay {
+              val increment: Double = Random.nextDouble() / 2d
+              val signal            = if (Random.nextBoolean()) 1 else -1
+              val currentValue      = current.value
 
-                current.copy(
-                  value = BigDecimal(currentValue + (signal * increment))
-                    .setScale(2, RoundingMode.HALF_UP)
-                    .doubleValue
-                )
-              }
+              current.copy(
+                value = BigDecimal(currentValue + (signal * increment))
+                  .setScale(2, RoundingMode.HALF_UP)
+                  .doubleValue
+              )
+            }
           )
 
       override def sendSamples: Stream[F, Temperature] =
