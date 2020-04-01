@@ -41,33 +41,49 @@ object LocationsGenerator extends GeoCalculator {
   val startingPoint = Point(47.582678d, -122.334617d)
   val destination   = Point(47.616187d, -122.203689d)
   val startingLocation = Location(
-    startingPoint,
-    destination,
+    Some(startingPoint),
+    Some(destination),
     calculateDistanceInMiles(startingPoint, destination)
   )
 
   def get[F[_]: Async: Logger: Timer]: Stream[F, Location] =
     Stream
       .iterateEval(startingLocation)(location => nextLocation(location))
-      .takeWhile(
-        location =>
-          destination.lat - location.currentLocation.lat > 0.0001d && destination.long - location.currentLocation.long > 0.0001d
+      .takeWhile(location =>
+        destination.lat - location.currentLocation
+          .map(_.lat)
+          .getOrElse(0d) > 0.0001d && destination.long - location.currentLocation
+          .map(_.long)
+          .getOrElse(0d) > 0.0001d
       )
-      .append(Stream.emit(Location(destination, destination, 0d)).covary[F])
+      .append(Stream.emit(Location(Some(destination), Some(destination), 0d)).covary[F])
 
   def nextLocation[F[_]: Async: Timer](location: Location): F[Location] =
     Timer[F]
       .sleep(1.seconds)
-      .flatMap(
-        _ =>
-          Async[F].delay {
-            val nextPoint =
-              Point(
-                closeLocation(location.currentLocation.lat, 0.00067018d),
-                closeLocation(location.currentLocation.long, 0.00261856d)
+      .flatMap(_ =>
+        Async[F].delay {
+          val nextPoint =
+            Point(
+              closeLocation(
+                location.currentLocation
+                  .map(_.lat)
+                  .getOrElse(0d),
+                0.00067018d
+              ),
+              closeLocation(
+                location.currentLocation
+                  .map(_.long)
+                  .getOrElse(0d),
+                0.00261856d
               )
-            Location(nextPoint, destination, calculateDistanceInMiles(nextPoint, destination))
-          }
+            )
+          Location(
+            Some(nextPoint),
+            Some(destination),
+            calculateDistanceInMiles(nextPoint, destination)
+          )
+        }
       )
 
   def closeLocation(point: Double, delta: Double): Double = {

@@ -28,5 +28,5 @@ final case class TemperaturesSummary(
 
 object TemperaturesSummary {
   val empty: TemperaturesSummary =
-    TemperaturesSummary(Vector.empty, Temperature(0d, TemperatureUnit("Fahrenheit")))
+    TemperaturesSummary(Vector.empty, Temperature(0d, Some(TemperatureUnit("Fahrenheit"))))
 }

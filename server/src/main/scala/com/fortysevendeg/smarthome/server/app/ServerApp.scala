@@ -12,7 +12,9 @@ import io.chrisdavenport.log4cats.Logger
 
 class ServerProgram[F[_]: ConcurrentEffect: Timer] extends ServerBoot[F] {
 
-  override def serverProgram(config: SmartHomeServerConfig)(implicit L: Logger[F], topicPubSubClient: Resource[F, PubsubProducer[F, Row]]): F[ExitCode] = {
+  override def serverProgram(
+      config: SmartHomeServerConfig
+  )(implicit L: Logger[F], topicPubSubClient: Resource[F, PubsubProducer[F, Row]]): F[ExitCode] = {
 
     implicit val PS: SmartHomeService[F] = new SmartHomeServiceHandler[F]
 
