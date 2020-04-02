@@ -12,7 +12,7 @@
 - Update sbt-native-packager to 1.7.0 [\#75](https://github.com/47degrees/mu-smart-home/pull/75) ([scala-steward](https://github.com/scala-steward))
 - Update sbt-native-packager to 1.6.2 [\#74](https://github.com/47degrees/mu-smart-home/pull/74) ([scala-steward](https://github.com/scala-steward))
 - Migrates from 47deg to 47degrees GH organization [\#73](https://github.com/47degrees/mu-smart-home/pull/73) ([franciscodr](https://github.com/franciscodr))
-- Update google-cloud-pubsub to 1.103.1 [\#72](https://github.com/47degrees/mu-smart-home/pull/72) ([scala-steward](https://github.com/scala-steward))
+- Update google-cloud-pubsub to 1.104.0 [\#72](https://github.com/47degrees/mu-smart-home/pull/72) ([scala-steward](https://github.com/scala-steward))
 - Update sbt-scalafmt to 2.3.2 [\#71](https://github.com/47degrees/mu-smart-home/pull/71) ([scala-steward](https://github.com/scala-steward))
 - Update cats-effect to 2.1.2 [\#70](https://github.com/47degrees/mu-smart-home/pull/70) ([scala-steward](https://github.com/scala-steward))
 - Update pureconfig to 0.12.3 [\#69](https://github.com/47degrees/mu-smart-home/pull/69) ([scala-steward](https://github.com/scala-steward))
