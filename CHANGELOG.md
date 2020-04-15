@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/47degrees/mu-smart-home/compare/f5ed75aa2146b25501dc895d405f5606bc24e162...HEAD)
 
+📈 **Dependency updates**
+
+- Update sbt to 1.3.10 [\#88](https://github.com/47degrees/mu-smart-home/pull/88) ([scala-steward](https://github.com/scala-steward))
+
 **Merged pull requests:**
 
 - Fixes Project [\#78](https://github.com/47degrees/mu-smart-home/pull/78) ([juanpedromoreno](https://github.com/juanpedromoreno))
