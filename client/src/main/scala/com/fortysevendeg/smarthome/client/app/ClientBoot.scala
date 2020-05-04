@@ -12,8 +12,8 @@ import pureconfig.generic.auto._
 
 abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift: Timer] {
 
-  def smartHomeServiceApi(host: String, port: Int)(
-      implicit L: Logger[F]
+  def smartHomeServiceApi(host: String, port: Int)(implicit
+      L: Logger[F]
   ): Stream[F, SmartHomeServiceApi[F]] =
     SmartHomeServiceApi.createInstance(host, port, sslEnabled = false)
 
