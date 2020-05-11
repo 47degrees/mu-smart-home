@@ -33,9 +33,9 @@ object ProjectPlugin extends AutoPlugin {
 
   private lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
     libraryDependencies ++= Seq(
-      "ch.qos.logback"    % "logback-classic" % V.logbackClassic,
-      "io.chrisdavenport" %% "log4cats-core"  % V.log4cats,
-      "io.chrisdavenport" %% "log4cats-slf4j" % V.log4cats
+      "ch.qos.logback"     % "logback-classic" % V.logbackClassic,
+      "io.chrisdavenport" %% "log4cats-core"   % V.log4cats,
+      "io.chrisdavenport" %% "log4cats-slf4j"  % V.log4cats
     )
   )
 
