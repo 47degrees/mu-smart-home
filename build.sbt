@@ -35,5 +35,5 @@ lazy val root = project
 addCommandAlias("runServer", "server/runMain com.fortysevendeg.smarthome.server.app.ServerApp")
 addCommandAlias("runClient", "client/runMain com.fortysevendeg.smarthome.client.app.ClientApp")
 
-addCommandAlias("ci-test", "scalafmtCheck; scalafmtSbtCheck; compile")
+addCommandAlias("ci-test", "scalafmtCheckAll; scalafmtSbtCheck; compile")
 addCommandAlias("ci-docs", "compile")

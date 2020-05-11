@@ -12,16 +12,17 @@ trait ConfigService[F[_]] {
 }
 
 object ConfigService {
-  def apply[F[_]: Effect]: ConfigService[F] = new ConfigService[F] {
+  def apply[F[_]: Effect]: ConfigService[F] =
+    new ConfigService[F] {
 
-    override def serviceConfig[Config](
-        implicit reader: Derivation[ConfigReader[Config]]
-    ): F[Config] =
-      Effect[F].fromEither(
-        ConfigSource.default
-          .load[Config]
-          .leftMap(e => new IllegalStateException(s"Error loading configuration: $e"))
-      )
+      override def serviceConfig[Config](implicit
+          reader: Derivation[ConfigReader[Config]]
+      ): F[Config] =
+        Effect[F].fromEither(
+          ConfigSource.default
+            .load[Config]
+            .leftMap(e => new IllegalStateException(s"Error loading configuration: $e"))
+        )
 
-  }
+    }
 }
