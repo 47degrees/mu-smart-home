@@ -25,25 +25,26 @@ trait SmartHomeServiceApi[F[_]] {
 
 object SmartHomeServiceApi {
 
-  def apply[F[_]: Effect](clientRPC: SmartHomeService[F])(
-      implicit L: Logger[F]
-  ): SmartHomeServiceApi[F] = new SmartHomeServiceApi[F] {
-    override def isEmpty: F[Boolean] =
-      for {
-        result <- clientRPC.isEmpty(IsEmptyRequest())
-        _      <- L.info(s"Result: $result")
-      } yield result.result
+  def apply[F[_]: Effect](clientRPC: SmartHomeService[F])(implicit
+      L: Logger[F]
+  ): SmartHomeServiceApi[F] =
+    new SmartHomeServiceApi[F] {
+      override def isEmpty: F[Boolean] =
+        for {
+          result <- clientRPC.isEmpty(IsEmptyRequest())
+          _      <- L.info(s"Result: $result")
+        } yield result.result
 
-    def getTemperature: Stream[F, TemperaturesSummary] = {
-      for {
-        temperature <- clientRPC.getTemperature(IsEmptyRequest())
-        _           <- Stream.eval(L.info(s"* Received new temperature: 👍 --> $temperature"))
-      } yield temperature
-    }.fold(TemperaturesSummary.empty)((summary, temperature) => summary.append(temperature))
+      def getTemperature: Stream[F, TemperaturesSummary] = {
+        for {
+          temperature <- clientRPC.getTemperature(IsEmptyRequest())
+          _           <- Stream.eval(L.info(s"* Received new temperature: 👍 --> $temperature"))
+        } yield temperature
+      }.fold(TemperaturesSummary.empty)((summary, temperature) => summary.append(temperature))
 
-    def comingBackMode(locations: Stream[F, Location]): Stream[F, ComingBackModeResponse] =
-      clientRPC.comingBackMode(locations)
-  }
+      def comingBackMode(locations: Stream[F, Location]): Stream[F, ComingBackModeResponse] =
+        clientRPC.comingBackMode(locations)
+    }
 
   def createInstance[F[_]: ContextShift: Logger: Timer](
       hostname: String,
