@@ -15,7 +15,7 @@ object ProjectPlugin extends AutoPlugin {
       val log4cats       = "1.1.1"
       val logbackClassic = "1.2.3"
       val mu             = "0.21.3"
-      val pureconfig     = "0.12.3"
+      val pureconfig     = "0.13.0"
       val circeVersion   = "0.13.0"
       val scala          = "2.13.1"
       val fs2PubSub      = "0.16.0"
