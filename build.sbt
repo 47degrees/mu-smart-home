@@ -37,3 +37,4 @@ addCommandAlias("runClient", "client/runMain com.fortysevendeg.smarthome.client.
 
 addCommandAlias("ci-test", "scalafmtCheckAll; scalafmtSbtCheck; compile")
 addCommandAlias("ci-docs", "compile")
+addCommandAlias("ci-publish", "ci-release")
