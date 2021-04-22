@@ -1,6 +1,6 @@
 package com.fortysevendeg.smarthome.client.common
 
-import cats.effect.{Async, Timer}
+import cats.effect.Async
 import cats.syntax.flatMap._
 import com.fortysevendeg.smarthome.protocol.messages._
 import fs2.Stream
@@ -9,6 +9,7 @@ import io.chrisdavenport.log4cats.Logger
 import scala.concurrent.duration._
 import scala.math.BigDecimal.RoundingMode
 import scala.util.Random
+import cats.effect.Temporal
 
 trait GeoCalculator {
   private val AVERAGE_RADIUS_OF_EARTH_KM: Double    = 6371d
@@ -46,7 +47,7 @@ object LocationsGenerator extends GeoCalculator {
     calculateDistanceInMiles(startingPoint, destination)
   )
 
-  def get[F[_]: Async: Logger: Timer]: Stream[F, Location] =
+  def get[F[_]: Async: Logger: Temporal]: Stream[F, Location] =
     Stream
       .iterateEval(startingLocation)(location => nextLocation(location))
       .takeWhile(location =>
@@ -58,8 +59,8 @@ object LocationsGenerator extends GeoCalculator {
       )
       .append(Stream.emit(Location(Some(destination), Some(destination), 0d)).covary[F])
 
-  def nextLocation[F[_]: Async: Timer](location: Location): F[Location] =
-    Timer[F]
+  def nextLocation[F[_]: Async: Temporal](location: Location): F[Location] =
+    Temporal[F]
       .sleep(1.seconds)
       .flatMap(_ =>
         Async[F].delay {
