@@ -9,8 +9,9 @@ import fs2.Stream
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import pureconfig.generic.auto._
+import cats.effect.Temporal
 
-abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift: Timer] {
+abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift: Temporal] {
 
   def smartHomeServiceApi(host: String, port: Int)(implicit
       L: Logger[F]
