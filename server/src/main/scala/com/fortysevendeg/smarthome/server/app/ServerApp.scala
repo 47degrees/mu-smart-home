@@ -9,8 +9,9 @@ import com.fortysevendeg.smarthome.protocol.services._
 import com.permutive.pubsub.producer.PubsubProducer
 import higherkindness.mu.rpc.server.{AddService, GrpcServer}
 import io.chrisdavenport.log4cats.Logger
+import cats.effect.Temporal
 
-class ServerProgram[F[_]: ConcurrentEffect: Timer] extends ServerBoot[F] {
+class ServerProgram[F[_]: ConcurrentEffect: Temporal] extends ServerBoot[F] {
 
   override def serverProgram(
       config: SmartHomeServerConfig
