@@ -6,8 +6,9 @@ import com.fortysevendeg.smarthome.client.common._
 import com.fortysevendeg.smarthome.client.common.Implicits._
 import fs2.Stream
 import io.chrisdavenport.log4cats.Logger
+import cats.effect.Temporal
 
-class ClientProgram[F[_]: ConcurrentEffect: ContextShift: Timer] extends ClientBoot[F] {
+class ClientProgram[F[_]: ConcurrentEffect: ContextShift: Temporal] extends ClientBoot[F] {
 
   def clientProgram(config: SmartHomeClientConfig)(implicit L: Logger[F]): Stream[F, ExitCode] = {
     for {
