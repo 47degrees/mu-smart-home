@@ -25,9 +25,9 @@ object ProjectPlugin extends AutoPlugin {
   import autoImport._
 
   private lazy val codeGenSettings: Seq[Def.Setting[_]] = Seq(
-    muSrcGenIdlType := IdlType.Proto,
+    muSrcGenIdlType            := IdlType.Proto,
     muSrcGenIdiomaticEndpoints := true,
-    muSrcGenJarNames := Seq("mu-smart-home-protocol"),
+    muSrcGenJarNames           := Seq("mu-smart-home-protocol"),
     sourceGenerators in Compile += (muSrcGen in Compile).taskValue
   )
 
@@ -40,14 +40,14 @@ object ProjectPlugin extends AutoPlugin {
   )
 
   lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
-    publish := ((): Unit),
-    publishLocal := ((): Unit),
+    publish         := ((): Unit),
+    publishLocal    := ((): Unit),
     publishArtifact := false
   )
 
   lazy val protocolSettings: Seq[Def.Setting[_]] = Seq(
-    publishMavenStyle := true,
-    crossPaths := false,
+    publishMavenStyle   := true,
+    crossPaths          := false,
     libraryDependencies := Nil
   )
 
@@ -84,10 +84,10 @@ object ProjectPlugin extends AutoPlugin {
 
   override def projectSettings: Seq[Def.Setting[_]] =
     Seq(
-      name := "mu-smart-home",
-      organization := "com.47deg",
+      name             := "mu-smart-home",
+      organization     := "com.47deg",
       organizationName := "47 Degrees",
-      scalaVersion := V.scala,
+      scalaVersion     := V.scala,
       scalacOptions += "-Ymacro-annotations",
       scalafmtCheck := true
     )
