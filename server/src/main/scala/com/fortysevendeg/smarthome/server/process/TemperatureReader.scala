@@ -9,18 +9,19 @@ import io.chrisdavenport.log4cats.Logger
 import scala.concurrent.duration._
 import scala.math.BigDecimal.RoundingMode
 import scala.util.Random
+import cats.effect.Temporal
 
 trait TemperatureReader[F[_]] {
   def sendSamples: Stream[F, Temperature]
 }
 
 object TemperatureReader {
-  implicit def instance[F[_]: Sync: Logger: Timer]: TemperatureReader[F] =
+  implicit def instance[F[_]: Sync: Logger: Temporal]: TemperatureReader[F] =
     new TemperatureReader[F] {
       val seed = Temperature(77d, Some(TemperatureUnit("Fahrenheit")))
 
       def readTemperature(current: Temperature): F[Temperature] =
-        Timer[F]
+        Temporal[F]
           .sleep(1.second)
           .flatMap(_ =>
             Sync[F].delay {
