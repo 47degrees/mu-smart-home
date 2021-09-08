@@ -7,8 +7,9 @@ import com.fortysevendeg.smarthome.protocol.messages._
 import com.fortysevendeg.smarthome.protocol.services._
 import fs2._
 import io.chrisdavenport.log4cats.Logger
+import cats.effect.Temporal
 
-class SmartHomeServiceHandler[F[_]: Async: Logger: Timer: TemperatureReader: SmartHomeSupervisor]
+class SmartHomeServiceHandler[F[_]: Async: Logger: Temporal: TemperatureReader: SmartHomeSupervisor]
     extends SmartHomeService[F] {
   val serviceName = "SmartHomeService"
 
