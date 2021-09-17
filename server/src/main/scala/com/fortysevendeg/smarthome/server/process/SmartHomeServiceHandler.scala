@@ -6,7 +6,7 @@ import cats.syntax.functor._
 import com.fortysevendeg.smarthome.protocol.messages._
 import com.fortysevendeg.smarthome.protocol.services._
 import fs2._
-import io.chrisdavenport.log4cats.Logger
+import org.typelevel.log4cats.Logger
 
 class SmartHomeServiceHandler[F[_]: Async: Logger: Timer: TemperatureReader: SmartHomeSupervisor]
     extends SmartHomeService[F] {

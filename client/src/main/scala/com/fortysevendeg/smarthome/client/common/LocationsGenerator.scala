@@ -4,7 +4,7 @@ import cats.effect.{Async, Timer}
 import cats.syntax.flatMap._
 import com.fortysevendeg.smarthome.protocol.messages._
 import fs2.Stream
-import io.chrisdavenport.log4cats.Logger
+import org.typelevel.log4cats.Logger
 
 import scala.concurrent.duration._
 import scala.math.BigDecimal.RoundingMode

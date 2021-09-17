@@ -9,7 +9,7 @@ import com.fortysevendeg.smarthome.client.common._
 import com.fortysevendeg.smarthome.protocol.messages._
 import com.fortysevendeg.smarthome.protocol.services._
 import fs2.Stream
-import io.chrisdavenport.log4cats.Logger
+import org.typelevel.log4cats.Logger
 import higherkindness.mu.rpc.ChannelForAddress
 import higherkindness.mu.rpc.channel.{ManagedChannelInterpreter, UsePlaintext}
 import io.grpc.{CallOptions, ManagedChannel}

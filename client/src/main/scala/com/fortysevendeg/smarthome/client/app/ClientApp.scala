@@ -5,7 +5,7 @@ import cats.implicits._
 import com.fortysevendeg.smarthome.client.common._
 import com.fortysevendeg.smarthome.client.common.Implicits._
 import fs2.Stream
-import io.chrisdavenport.log4cats.Logger
+import org.typelevel.log4cats.Logger
 
 class ClientProgram[F[_]: ConcurrentEffect: ContextShift: Timer] extends ClientBoot[F] {
 
