@@ -13,6 +13,7 @@ import io.chrisdavenport.log4cats.Logger
 import higherkindness.mu.rpc.ChannelForAddress
 import higherkindness.mu.rpc.channel.{ManagedChannelInterpreter, UsePlaintext}
 import io.grpc.{CallOptions, ManagedChannel}
+import cats.effect.Temporal
 
 trait SmartHomeServiceApi[F[_]] {
 
@@ -46,7 +47,7 @@ object SmartHomeServiceApi {
         clientRPC.comingBackMode(locations)
     }
 
-  def createInstance[F[_]: ContextShift: Logger: Timer](
+  def createInstance[F[_]: ContextShift: Logger: Temporal](
       hostname: String,
       port: Int,
       sslEnabled: Boolean = true
