@@ -9,8 +9,8 @@ import com.fortysevendeg.smarthome.server.common._
 import com.permutive.pubsub.producer.{Model, PubsubProducer}
 import com.permutive.pubsub.producer.encoder.MessageEncoder
 import com.permutive.pubsub.producer.grpc.{GooglePubsubProducer, PubsubProducerConfig}
-import io.chrisdavenport.log4cats.Logger
-import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 import io.circe.generic.auto._, io.circe.syntax._
 import pureconfig.generic.auto._
 

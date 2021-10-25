@@ -8,7 +8,7 @@ import com.fortysevendeg.smarthome.protocol.messages._
 import com.fortysevendeg.smarthome.server.common.Row
 import com.permutive.pubsub.producer.Model.MessageId
 import com.permutive.pubsub.producer.PubsubProducer
-import io.chrisdavenport.log4cats.Logger
+import org.typelevel.log4cats.Logger
 
 trait SmartHomeSupervisor[F[_]] {
   def performAction(location: Location): F[List[SmartHomeAction]]

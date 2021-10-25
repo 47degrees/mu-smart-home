@@ -8,7 +8,7 @@ import com.fortysevendeg.smarthome.server.process._
 import com.fortysevendeg.smarthome.protocol.services._
 import com.permutive.pubsub.producer.PubsubProducer
 import higherkindness.mu.rpc.server.{AddService, GrpcServer}
-import io.chrisdavenport.log4cats.Logger
+import org.typelevel.log4cats.Logger
 
 class ServerProgram[F[_]: ConcurrentEffect: Timer] extends ServerBoot[F] {
 

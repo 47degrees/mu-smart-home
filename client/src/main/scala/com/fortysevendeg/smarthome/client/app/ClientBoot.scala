@@ -6,8 +6,8 @@ import com.fortysevendeg.smarthome.client.common._
 import com.fortysevendeg.smarthome.client.process.SmartHomeServiceApi
 import com.fortysevendeg.smarthome.config.ConfigService
 import fs2.Stream
-import io.chrisdavenport.log4cats.Logger
-import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 import pureconfig.generic.auto._
 
 abstract class ClientBoot[F[_]: ConcurrentEffect: ContextShift: Timer] {
